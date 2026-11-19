@@ -32,7 +32,7 @@ the page the person has open updates. Files are exports, made when asked.
 
 ## Setup and paths
 
-Written for `cad==0.11.13`. Before first use in a chat, run `cad --version`. If `cad` is missing or older than
+Written for `cad==0.11.14`. Before first use in a chat, run `cad --version`. If `cad` is missing or older than
 0.11.12, run `uv tool install cad`, adding `--force` if uv says `cad` already exists.
 
 If cad is a major or minor version newer than this skill, tell the person to update the text-to-cad plugin:
@@ -168,6 +168,12 @@ is the script's folder; two explicit names in it must differ.
   cache, as last built. When the cache holds no file of one (deleted by hand, or never
   saved), the page, `cad model inspect <id>` and `cad_show` print the command that brings it
   back (`cad run src/bracket.py`). Run it.
+- **A new part's edges get the fillets and chamfers its use calls for, and its process's
+  where the request names or implies one** ([Design for the process](#design-for-the-process)),
+  not every edge left sharp. An edit adds what was asked and no edge treatment of its own:
+  the reply names the new edges it left sharp. With no process, none is assumed and nothing
+  is added for one
+  ([fillets and chamfers](references/build123d-modeling.md#fillets-and-chamfers)).
 - Model units are millimetres, +Z up.
 - An image without a scale sets no fit dimension, and a drawing's units, projection and
   revision decide how its numbers read. A missing or conflicting dimension that changes
