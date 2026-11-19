@@ -188,6 +188,7 @@ LOG = logging.getLogger("cad_server.analytics")
 OWN = frozenset({"cad", "cadgen", "cad_server"})
 
 PRIVACY_URL = "https://www.texttocad.dev/privacy-policy"
+# 12: a GSL model, a field the page draws, is a format of its own (``gsl``);
 # 11: where a batch comes from is one field, ``app`` (the agent app, detected), one batch per app; the channel of 10
 # and earlier (an app's name joined to where its copy came from) is no longer sent; how a computer got to a
 # version (``arrival``); and how each of cad's own updates ended (``update``);
@@ -199,7 +200,7 @@ PRIVACY_URL = "https://www.texttocad.dev/privacy-policy"
 # engine's documents (kind ``xbf``) and a command's sender (process ``cli``); 5: why builds and snapshots
 # failed, and each batch's id and time; 4: why tool calls failed; 3: the old build daemon's counts, and files as
 # numbers; 2: the install's channel replaced `source`
-SCHEMA = 11
+SCHEMA = 12
 # What a yes agreed to: the fields and events this module sends. Raise it when that grows, and a yes
 # to less counts as no answer again; a no stays a no. Restarts and updates that send nothing new keep
 # the answer: it lives in the state folder, which every release reads, not in its code. Neither schema 4, 5 nor 6 raised it
@@ -224,7 +225,8 @@ SCHEMA = 11
 # (every release reads the one settings file, and the id in it). No field of the person's, no new identity. Nor
 # schema 11's ``update``: whether cad's own update of itself went, and where it did not, which step, in a word of ours,
 # with the version before it (as ``arrival`` says it), the installer, a count of tries and whether it was typed --
-# cad failing or working, never a message, a path or anything of the person's, under the same ids.
+# cad failing or working, never a message, a path or anything of the person's, under the same ids. Nor
+# schema 12: one more format.
 DISCLOSURE = 1
 # What the notice told (``notify``): what is sent by default, without a yes. Raise it when that grows,
 # and the next ``cadgen`` command says it again; nothing is sent by default until it has.

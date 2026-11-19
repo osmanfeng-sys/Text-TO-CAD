@@ -79,6 +79,8 @@
  * Schema 11 adds `arrival`, which no schema before it sends: whether a computer's update or install reached the
  * version, step by step, so a computer stuck on its way to one is counted; and `update`, which no schema before it
  * sends either: whether each of cad's own updates of itself went, and where one did not, which step failed.
+ *
+ * Schema 12 is schema 11 with one more format, a GSL model (`gsl`): an implicit field the CAD Viewer draws.
  */
 
 import { createHash } from 'node:crypto';
@@ -137,6 +139,7 @@ const CHUNK_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
 const KINDS = new Set(['step', 'stl', '3mf', 'glb', 'dxf', 'urdf', 'srdf', 'sdf']);
 const KINDS_6 = new Set([...KINDS, 'xbf']);
 const KINDS_8 = new Set([...KINDS_6, 'model', 'kicad_pcb', 'kicad_sch']);
+const KINDS_12 = new Set([...KINDS_8, 'gsl']);
 const VIAS = new Set(['script', 'command']);
 const FEATURES = new Set(['assembly', 'declared_mesh', 'kinematics', 'animation', 'drawing', 'quick_edit']);
 // What a person used in a CAD view (`cad_server/analytics.py`: `CONTROLS`, the page's own in `@cad/ui`'s
@@ -518,6 +521,12 @@ const SCHEMAS = new Map([
   // carries none (`null`, which no store is sent). Every earlier schema's batch is translated (`translated`). And how a
   // computer got to the version, and how each of cad's own updates went.
   [11, { fields: ['app', 'process', 'batch', 'at'], events: new Set([...NAMED_EVENTS, 'control', 'arrival', 'update']), kinds: KINDS_8,
+    origin: batch => ({ channel: null, app: matches(batch.app, APP, 'app'),
+      legacy_channel: null, source: null, process: oneOf(batch.process, PROCESSES_6, 'process') }),
+    current: true, named: true, maxEvents: MAX_EVENTS_7, parts: true,
+    snapshotFailures: SNAPSHOT_FAILURES_9, buildFailures: BUILD_FAILURES_10, toolFailures: FAILURES_10, causes: true }],
+  // A GSL model, an implicit field the page draws, is a format of its own. Nothing else of schema 11 changes.
+  [12, { fields: ['app', 'process', 'batch', 'at'], events: new Set([...NAMED_EVENTS, 'control', 'arrival', 'update']), kinds: KINDS_12,
     origin: batch => ({ channel: null, app: matches(batch.app, APP, 'app'),
       legacy_channel: null, source: null, process: oneOf(batch.process, PROCESSES_6, 'process') }),
     current: true, named: true, maxEvents: MAX_EVENTS_7, parts: true,
